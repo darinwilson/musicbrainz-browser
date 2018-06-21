@@ -12,6 +12,10 @@ import styles from './Styles/APITestingScreenStyles'
 
 // API buttons here:
 const endpoints = [
+  { label: 'Search for "John Coltrane"', endpoint: 'artistSearch', args: ['John Coltrane']},
+  { label: 'Get Artist (John Coltrane)', endpoint: 'getArtist', args: ['b625448e-bf4a-41c3-a421-72ad46cdb831']},
+  { label: 'Get Releases of Giant Steps', endpoint: 'getAlbumReleases', args: ['2cdca11d-3e45-3152-93e5-4d2a4ddb1bc6']},
+  { label: 'Get Tracks on Giant Steps', endpoint: 'getTracks', args: ['22689758-ffc1-450f-bb48-52b577077dba']},
   { label: 'Github Root', endpoint: 'getRoot' },
   { label: 'Github Rate Limit', endpoint: 'getRate' },
   { label: 'Search User (gantman)', endpoint: 'getUser', args: ['gantman'] },

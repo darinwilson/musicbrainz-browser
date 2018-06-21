@@ -20,6 +20,13 @@ const create = (baseURL = 'https://api.github.com/') => {
     timeout: 10000
   })
 
+  const mbapi = apisauce.create({
+    baseURL: 'https://musicbrainz.org/ws/2',
+    headers: {
+    },
+    timeout: 10000
+  })
+
   // ------
   // STEP 2
   // ------
@@ -38,6 +45,24 @@ const create = (baseURL = 'https://api.github.com/') => {
   const getRate = () => api.get('rate_limit')
   const getUser = (username) => api.get('search/users', {q: username})
 
+
+  // MusicBrainz API calls
+
+  // searches MusicBrainz's artist records for the given query
+  const artistSearch = (query) => mbapi.get('artist', {query: query})
+
+  // fetches an artist record, including "release-groups" (which is what the world calls an "album")
+  const getArtist = (artistId) => mbapi.get(`artist/${artistId}`, {inc: 'release-groups', type: 'album'})
+
+  // given a release group id, this returns all of the "releases" of an album (e.g. the US version,
+  // the Japan version, the remastered version with bonus tracks, etc) - for our purposes, we'll
+  // call the chronologically oldest of these the "official" release
+  const getAlbumReleases = (releaseGroupId) => mbapi.get(`release-group/${releaseGroupId}`,
+    {inc: 'releases', status: 'official'})
+
+  // given a particular release, this returns the "recordings" (i.e. tracks) on that release
+  const getTracks = (releaseId) => mbapi.get(`release/${releaseId}`, {inc: 'recordings'})
+
   // ------
   // STEP 3
   // ------
@@ -54,7 +79,11 @@ const create = (baseURL = 'https://api.github.com/') => {
     // a list of the API functions from step 2
     getRoot,
     getRate,
-    getUser
+    getUser,
+    artistSearch,
+    getArtist,
+    getAlbumReleases,
+    getTracks
   }
 }
 
