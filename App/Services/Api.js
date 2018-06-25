@@ -27,6 +27,18 @@ const create = (baseURL = 'https://api.github.com/') => {
     timeout: 10000
   })
 
+  const coverArtApi = apisauce.create({
+    baseURL: 'https://coverartarchive.org/',
+    headers: {},
+    timeout: 10000
+  })
+
+  const artistImageApi = apisauce.create({
+    baseURL: 'https://commons.wikimedia.org/w/',
+    headers: {},
+    timeout: 10000
+  })
+
   // ------
   // STEP 2
   // ------
@@ -52,7 +64,7 @@ const create = (baseURL = 'https://api.github.com/') => {
   const artistSearch = (query) => mbapi.get('artist', {query: query})
 
   // fetches an artist record, including "release-groups" (which is what the world calls an "album")
-  const getArtist = (artistId) => mbapi.get(`artist/${artistId}`, {inc: 'release-groups', type: 'album'})
+  const getArtist = (artistId) => mbapi.get(`artist/${artistId}`, {inc: 'release-groups url-rels', type: 'album'})
 
   // given a release group id, this returns all of the "releases" of an album (e.g. the US version,
   // the Japan version, the remastered version with bonus tracks, etc) - for our purposes, we'll
@@ -62,6 +74,27 @@ const create = (baseURL = 'https://api.github.com/') => {
 
   // given a particular release, this returns the "recordings" (i.e. tracks) on that release
   const getTracks = (releaseId) => mbapi.get(`release/${releaseId}`, {inc: 'recordings'})
+
+
+  // Cover Art API calls
+
+  // this loads urls for all of the available images for a given release, keyed by a MusicBrainz release id
+  // we probably want the one where 'front' === true, and then find 'large' under 'thumbnails'
+  const getCoverArtUrls = (releaseId) => coverArtApi.get(`/release/${releaseId}`)
+
+
+  // Artist Image API calls
+
+  // this one is fun: using the result of the getArtist call above:
+  // - find the "relations" node
+  // - iterate through the relations until you find the one with "type: image"
+  // - grab the ["url"]["resource"] value from the relation node
+  // - grab the last part of the URL path (it will be something like "File:John_Coltrane_1963a.jpg")
+  // - pass that value into this function
+  // - with the result of this function, get the first node of ['query']['pages'], then ['imageinfo']['url']
+  const getArtistImageUrl = (wikiId) => artistImageApi.get('/api.php', {action: 'query', titles: wikiId,
+    prop: 'imageinfo', iiprop: 'url', iiurlwidth: 500, format: 'json'})
+
 
   // ------
   // STEP 3
@@ -83,7 +116,9 @@ const create = (baseURL = 'https://api.github.com/') => {
     artistSearch,
     getArtist,
     getAlbumReleases,
-    getTracks
+    getTracks,
+    getCoverArtUrls,
+    getArtistImageUrl
   }
 }
 
