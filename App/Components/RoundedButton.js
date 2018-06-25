@@ -1,39 +1,31 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { TouchableOpacity, Text } from 'react-native'
-import styles from './Styles/RoundedButtonStyles'
-import ExamplesRegistry from '../Services/ExamplesRegistry'
+import React, { Component } from "react"
+import PropTypes from "prop-types"
+import { TouchableOpacity } from "react-native"
+import { Fonts, Colors, Metrics } from "../Themes"
+import Text from "./Text"
 
-// Note that this file (App/Components/RoundedButton) needs to be
-// imported in your app somewhere, otherwise your component won't be
-// compiled and added to the examples dev screen.
-
-// Ignore in coverage report
-/* istanbul ignore next */
-ExamplesRegistry.addComponentExample('Rounded Button', () =>
-  <RoundedButton
-    text='real buttons have curves'
-    onPress={() => window.alert('Rounded Button Pressed!')}
-  />
-)
+const ROOT = {
+  height: 45,
+  borderRadius: 4,
+  backgroundColor: Colors.palette.purple,
+  justifyContent: "center"
+}
+const TEXT = {
+  color: Colors.palette.white,
+  textAlign: "center",
+  fontWeight: "bold",
+  fontSize: Fonts.size.medium,
+  paddingHorizontal: 10
+}
 
 export default class RoundedButton extends Component {
-  static propTypes = {
-    onPress: PropTypes.func,
-    text: PropTypes.string,
-    children: PropTypes.string,
-    navigator: PropTypes.object
-  }
-
-  getText () {
-    const buttonText = this.props.text || this.props.children || ''
-    return buttonText.toUpperCase()
-  }
-
-  render () {
+  render() {
+    const text = this.props.text || this.props.children || ""
+    const rootStyle = { ...ROOT, ...this.props.style }
+    const textStyle = { ...TEXT, ...this.props.textStyle }
     return (
-      <TouchableOpacity style={styles.button} onPress={this.props.onPress}>
-        <Text style={styles.buttonText}>{this.getText()}</Text>
+      <TouchableOpacity style={rootStyle} onPress={this.props.onPress}>
+        <Text style={textStyle}>{text}</Text>
       </TouchableOpacity>
     )
   }
