@@ -11,6 +11,8 @@ import Text from "../Components/Text"
 import RoundedButton from "../Components/RoundedButton"
 import { Colors, Fonts } from "../Themes"
 import ArtistCell from "../Components/ArtistCell"
+import { connect } from "react-redux"
+import ArtistActions, { ArtistSelectors } from "../Redux/ArtistRedux"
 
 const ROOT = { flex: 1, backgroundColor: Colors.background }
 const IMAGE = { marginTop: 40, marginBottom: 30, alignSelf: "center" }
@@ -32,29 +34,67 @@ const RESULTS = { flex: 1 }
 
 const Logo = require("../Images/musicbrainz-logo.png")
 
-export default class ArtistSearchScreen extends Component {
+class ArtistSearchScreen extends Component {
   static navigationOptions = {
     title: "Artist Search"
   }
+  state = {
+    query: ""
+  }
+
+  changeText = value => this.setState({ query: value })
 
   render() {
-    const search = "John Coltrane"
-    pressArtist = artistId => () =>
-      this.props.navigation.navigate("artist", { artistId })
+    const { search, getArtist, navigation, artists = [] } = this.props
+    const { query } = this.state
+    pressArtist = artistId => () => {
+      navigation.navigate("artist", { artistId })
+      getArtist(artistId)
+    }
 
     return (
       <ScrollView style={ROOT}>
         <View style={SEARCH_PANEL}>
-          <TextInput style={SEARCH_FIELD} value={search} />
-          <RoundedButton text="Search" style={SEARCH_BUTTON} />
+          <TextInput
+            value={query}
+            onChangeText={this.changeText}
+            style={SEARCH_FIELD}
+          />
+          <RoundedButton
+            text="Search"
+            style={SEARCH_BUTTON}
+            onPress={() => search(query)}
+          />
         </View>
         <View style={RESULTS}>
-          <ArtistCell onPress={pressArtist(1)} name="Johnny C 1" />
-          <ArtistCell onPress={pressArtist(2)} name="Johnny C 2" />
-          <ArtistCell onPress={pressArtist(3)} name="Johnny C 3" />
-          <ArtistCell onPress={pressArtist(4)} name="Johnny C 4" />
+          {artists.map(artist => (
+            <ArtistCell
+              key={artist.id}
+              onPress={pressArtist(artist.id)}
+              name={artist.name}
+            />
+          ))}
         </View>
       </ScrollView>
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    searching: state.artists.fetching,
+    artists: ArtistSelectors.selectSearchResults(state.artists)
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    search: query => dispatch(ArtistActions.searchArtistRequest(query)),
+    getArtist: id => dispatch(ArtistActions.artistRequest(id)),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ArtistSearchScreen)
