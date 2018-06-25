@@ -4,6 +4,8 @@ import RoundedButton from "../Components/RoundedButton"
 import { Colors } from "../Themes"
 import Text from "../Components/Text"
 import AlbumCell from "../Components/AlbumCell"
+import { connect } from "react-redux"
+import ArtistActions, { ArtistSelectors } from "../Redux/ArtistRedux"
 
 const ROOT = { flex: 1, backgroundColor: Colors.background }
 const DETAILS = { paddingBottom: 40 }
@@ -14,7 +16,7 @@ const ROW = { flexDirection: "row", paddingHorizontal: 10 }
 const RESULTS = { paddingHorizontal: 10 }
 const Logo = require("../Images/musicbrainz-logo.png")
 
-export default class ArtistScreen extends Component {
+class ArtistScreen extends Component {
   static navigationOptions = {
     title: "Artist"
   }
@@ -22,11 +24,13 @@ export default class ArtistScreen extends Component {
   toggleHeart = () => true
 
   render() {
+    const { artist, navigation } = this.props
+
     const personImage = { uri: "https://placekitten.com/250/250" }
     pressAlbum = albumId => () =>
-      this.props.navigation.navigate("album", { albumId })
+      navigation.navigate("album", { albumId })
 
-    const name = "Artist Name Here"
+    const name = artist && artist.name
     const born = "to be wild"
     const died = "rip"
 
@@ -60,3 +64,9 @@ export default class ArtistScreen extends Component {
     )
   }
 }
+
+function mapStateToProps (state, props) {
+  return { artist: ArtistSelectors.getArtist(props.navigation.state.params.artistId, state.artists) }
+}
+
+export default connect(mapStateToProps)(ArtistScreen)
