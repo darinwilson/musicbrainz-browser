@@ -11,7 +11,7 @@ import { ArtistTypes } from '../Redux/ArtistRedux'
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
-import { searchArtist, getArtist } from "./ArtistSagas"
+import { searchArtist, getArtist, getReleaseGroup } from "./ArtistSagas"
 
 /* ------------- API ------------- */
 
@@ -26,5 +26,6 @@ export default function * root () {
     takeLatest(StartupTypes.STARTUP, startup),
     takeLatest(ArtistTypes.SEARCH_ARTIST_REQUEST, searchArtist, api),
     takeLatest(ArtistTypes.ARTIST_REQUEST, getArtist, api),
+    takeLatest(ArtistTypes.RELEASE_GROUP_REQUEST, getReleaseGroup, api),
   ])
 }

@@ -1,7 +1,7 @@
 import { groupBy, head, map, prop } from "ramda"
 import { createActions, createReducer } from "reduxsauce"
 
-const groupById = artists => map(head, groupBy(prop("id"), artists))
+const groupById = collection => map(head, groupBy(prop("id"), collection))
 
 /* ------------- Types and Action Creators ------------- */
 
@@ -9,9 +9,12 @@ const { Types, Creators } = createActions({
   searchArtistRequest: ["query"],
   searchArtistSuccess: ["results"],
   searchArtistFailure: null,
-  artistRequest: ["id"],
-  artistSuccess: ["artist"],
+  artistRequest: ["artistId"],
+  artistSuccess: ["artist", "releaseGroups"],
   artistFailure: null,
+  releaseGroupRequest: ["artistId", "releaseGroupId"],
+  releaseGroupSuccess: ["artistId", "releaseGroupId", "album"],
+  releaseGroupFailure: ["artistId", "releaseGroupId", "error"]
 })
 
 export const ArtistTypes = Types
@@ -22,51 +25,94 @@ export default Creators
 export const INITIAL_STATE = {
   fetching: false,
   error: undefined,
-  artists: {}, // a map of all the data
+  artists: {},
   results: [],
+  releaseGroups: {},
+  albums: {}
 }
 
 /* ------------- Selectors ------------- */
 
 export const ArtistSelectors = {
-  selectSearchResults: artistState => artistState.results,
-  getArtist: (id, artistState) => artistState.artists[id] || artistState.results.find(artist => artist.id)
+  selectSearchResults: artistsState => artistsState.results,
+  getArtist: (id, artistsState) =>
+    artistsState.artists[id] || artistsState.results.find(artist => artist.id),
+  getReleaseGroupsByArtist: (artistId, artistsState) => {
+    const artist = artistsState.artists[artistId] || {}
+    const { releaseGroups = [] } = artist
+    return releaseGroups.map(rg => artistsState.releaseGroups[rg])
+  }
 }
 
 /* ------------- Reducers ------------- */
 
-export const searchRequest = state => ({
+const searchRequest = state => ({
   ...state,
   fetching: true,
   results: [],
   error: undefined
 })
-export const searchSuccess = (state, { results }) => ({
+const searchSuccess = (state, { results }) => ({
   ...state,
   fetching: false,
   error: undefined,
   results
 })
-export const searchFailure = (state, { error }) => ({
+const searchFailure = (state, { error }) => ({
   ...state,
   fetching: false,
   error
 })
 
-export const artistRequest = state => ({
+const artistRequest = state => ({
   ...state,
   fetching: true,
   error: undefined
 })
 
-export const artistSuccess = (state, { artist }) => ({
+const artistSuccess = (state, { artist, releaseGroups }) => ({
   ...state,
   fetching: false,
   error: undefined,
-  artists: { ...state.artists, [artist.id]: artist }
+  artists: {
+    ...state.artists,
+    [artist.id]: {
+      ...state.artists[artist.id],
+      ...artist,
+      releaseGroups: releaseGroups.map(x => x.id)
+    }
+  },
+  releaseGroups: {
+    ...state.releaseGroups,
+    ...groupById(releaseGroups)
+  }
 })
 
-export const artistFailure = (state, { error }) => ({
+const artistFailure = (state, { error }) => ({
+  ...state,
+  fetching: false,
+  error
+})
+
+const releaseGroupRequest = state => ({
+  ...state,
+  fetching: true,
+  error: undefined
+})
+
+const releaseGroupSuccess = (state, { releaseGroupId, album }) => ({
+  ...state,
+  fetching: false,
+  albums: {
+    ...state.albums,
+    [album.id]: {
+      ...state.albums[album.id],
+      ...album
+    }
+  }
+})
+
+const releaseGroupFailure = (state, { error }) => ({
   ...state,
   fetching: false,
   error
@@ -80,5 +126,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SEARCH_ARTIST_FAILURE]: searchFailure,
   [Types.ARTIST_REQUEST]: artistRequest,
   [Types.ARTIST_SUCCESS]: artistSuccess,
-  [Types.ARTIST_FAILURE]: artistFailure
+  [Types.ARTIST_FAILURE]: artistFailure,
+  [Types.RELEASE_GROUP_REQUEST]: releaseGroupRequest,
+  [Types.RELEASE_GROUP_SUCCESS]: releaseGroupSuccess,
+  [Types.RELEASE_GROUP_FAILURE]: releaseGroupFailure
 })
