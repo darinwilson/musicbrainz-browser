@@ -1,9 +1,10 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import { TouchableOpacity, Text, Image } from "react-native"
+import { TouchableOpacity, Image } from "react-native"
 import { Fonts, Colors, Metrics } from "../Themes"
+import Text from "./Text"
 
-const ROOT = { flexDirection: "row", alignItems: "center" }
+const ROOT = { flexDirection: "row", alignItems: "center", paddingVertical: 10 }
 const IMAGE = {
   marginRight: 10,
   height: 50,
@@ -19,7 +20,6 @@ export default class RoundedButton extends Component {
     const personImage = { uri: "https://placekitten.com/300/300" }
     return (
       <TouchableOpacity style={ROOT} onPress={this.props.onPress}>
-        <Image source={personImage} style={IMAGE} />
         <Text style={NAME}>{this.props.name}</Text>
       </TouchableOpacity>
     )

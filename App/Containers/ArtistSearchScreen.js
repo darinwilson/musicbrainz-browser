@@ -30,7 +30,7 @@ const SEARCH_FIELD = {
   fontSize: Fonts.size.medium
 }
 const SEARCH_BUTTON = { marginLeft: 10 }
-const RESULTS = { flex: 1 }
+const RESULTS = { flex: 1, paddingHorizontal: 10 }
 
 const Logo = require("../Images/musicbrainz-logo.png")
 
@@ -39,7 +39,7 @@ class ArtistSearchScreen extends Component {
     title: "Artist Search"
   }
   state = {
-    query: ""
+    query: "The Police"
   }
 
   changeText = value => this.setState({ query: value })
@@ -53,7 +53,7 @@ class ArtistSearchScreen extends Component {
     }
 
     return (
-      <ScrollView style={ROOT}>
+      <ScrollView style={ROOT} keyboardShouldPersistTaps="handled">
         <View style={SEARCH_PANEL}>
           <TextInput
             value={query}
@@ -90,7 +90,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     search: query => dispatch(ArtistActions.searchArtistRequest(query)),
-    getArtist: id => dispatch(ArtistActions.artistRequest(id)),
+    getArtist: id => dispatch(ArtistActions.artistRequest(id))
   }
 }
 
