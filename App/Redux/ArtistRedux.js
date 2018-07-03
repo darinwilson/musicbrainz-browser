@@ -6,6 +6,8 @@ const groupById = collection => map(head, groupBy(prop("id"), collection))
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
+  setFavorites: ["favorites"],
+  addFavorite: ["newFavorite"],
   searchArtistRequest: ["query"],
   searchArtistSuccess: ["results"],
   searchArtistFailure: null,
@@ -28,7 +30,8 @@ export const INITIAL_STATE = {
   artists: {},
   results: [],
   releaseGroups: {},
-  albums: {}
+  albums: {},
+  favorites: []
 }
 
 /* ------------- Selectors ------------- */
@@ -41,10 +44,16 @@ export const ArtistSelectors = {
     const artist = artistsState.artists[artistId] || {}
     const { releaseGroups = [] } = artist
     return releaseGroups.map(rg => artistsState.releaseGroups[rg])
-  }
+  },
+  getFavorites: artistsState => artistsState.favorites
 }
 
 /* ------------- Reducers ------------- */
+
+const setFavorites = (state, { favorites }) => ({
+  ...state,
+  favorites
+})
 
 const searchRequest = state => ({
   ...state,
@@ -121,6 +130,7 @@ const releaseGroupFailure = (state, { error }) => ({
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
+  [Types.SET_FAVORITES]: setFavorites,
   [Types.SEARCH_ARTIST_REQUEST]: searchRequest,
   [Types.SEARCH_ARTIST_SUCCESS]: searchSuccess,
   [Types.SEARCH_ARTIST_FAILURE]: searchFailure,

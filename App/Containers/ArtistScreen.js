@@ -23,7 +23,10 @@ class ArtistScreen extends Component {
     title: "Artist"
   }
 
-  toggleHeart = () => true
+  toggleHeart() {
+    const { artist, addFavorite } = this.props
+    addFavorite({id: artist.id, name: artist.name})
+  }
 
   render() {
     const { artist, navigation, releaseGroups } = this.props
@@ -50,7 +53,7 @@ class ArtistScreen extends Component {
           <View style={{ ...ROW, ...TOP_ROW }}>
             <View style={NAME_AND_HEART}>
               <Text text={name} />
-              <Text text="❤️" onPress={this.toggleHeart} />
+              <Text text="❤️" onPress={this.toggleHeart.bind(this)} />
             </View>
           </View>
           <View style={ROW}>
@@ -87,4 +90,13 @@ function mapStateToProps(state, props) {
   }
 }
 
-export default connect(mapStateToProps)(ArtistScreen)
+function mapDispatchToProps(dispatch) {
+  return {
+    addFavorite: newFavorite => dispatch(ArtistActions.addFavorite(newFavorite))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ArtistScreen)
