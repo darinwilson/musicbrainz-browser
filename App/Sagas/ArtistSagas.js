@@ -1,7 +1,6 @@
 import { AsyncStorage } from 'react-native'
 import { call, put } from "redux-saga/effects"
 import { path, sortBy, prop, last, keys, head } from "ramda"
-import Immutable from 'seamless-immutable'
 import ArtistActions from "../Redux/ArtistRedux"
 import { parse } from "date-fns"
 
@@ -98,8 +97,8 @@ export function* getReleaseGroup(api, action) {
 
 export function* addFavorite(action) {
   const { newFavorite } = action
-  const currentFavorites = yield call(AsyncStorage.getItem, 'mbb.favorites')
-  const newFavorites = Immutable(JSON.parse(currentFavorites || [])).concat([newFavorite])
+  const currentFavorites = JSON.parse(yield call(AsyncStorage.getItem, 'mbb.favorites'))
+  const newFavorites = [...currentFavorites, newFavorite]
 
   // we'll just assume this works...LOL
   yield call(AsyncStorage.setItem, 'mbb.favorites', JSON.stringify(newFavorites))
