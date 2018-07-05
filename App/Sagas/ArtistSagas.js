@@ -1,3 +1,4 @@
+import { AsyncStorage } from 'react-native'
 import { call, put } from "redux-saga/effects"
 import { path, sortBy, prop, last, keys, head } from "ramda"
 import ArtistActions from "../Redux/ArtistRedux"
@@ -92,4 +93,15 @@ export function* getReleaseGroup(api, action) {
   } else {
     yield put.resolve(ArtistActions.releaseGroupFailure())
   }
+}
+
+export function* addFavorite(action) {
+  const { newFavorite } = action
+  const currentFavorites = JSON.parse(yield call(AsyncStorage.getItem, 'mbb.favorites'))
+  const newFavorites = [...currentFavorites, newFavorite]
+
+  // we'll just assume this works...LOL
+  yield call(AsyncStorage.setItem, 'mbb.favorites', JSON.stringify(newFavorites))
+
+  yield put.resolve(ArtistActions.setFavorites(newFavorites))
 }

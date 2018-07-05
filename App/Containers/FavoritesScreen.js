@@ -3,27 +3,52 @@ import { Image, Text, View, ScrollView } from "react-native"
 import RoundedButton from "../Components/RoundedButton"
 import { Colors } from "../Themes"
 import ArtistCell from "../Components/ArtistCell"
+import { connect } from "react-redux"
+import ArtistActions, { ArtistSelectors } from "../Redux/ArtistRedux"
 
 const ROOT = { flex: 1, backgroundColor: Colors.background }
 const IMAGE = { marginTop: 40, marginBottom: 30, alignSelf: "center" }
 
-export default class FavoritesScreen extends Component {
+class FavoritesScreen extends Component {
   static navigationOptions = {
     title: "Favorites"
   }
 
   render() {
-    pressArtist = artistId => () =>
-      this.props.navigation.navigate("artist", { artistId })
+    const { getArtist, navigation, favorites } = this.props
+    pressArtist = artistId => () => {
+      navigation.navigate("artist", { artistId })
+      getArtist(artistId)
+    }
 
     return (
       <ScrollView style={ROOT}>
-        <ArtistCell onPress={pressArtist(1)} name="Nikki" />
-        <ArtistCell onPress={pressArtist(2)} name="Brittney" />
-        <ArtistCell onPress={pressArtist(3)} name="Christina" />
-        <ArtistCell onPress={pressArtist(4)} name="Arianna" />
-        <ArtistCell onPress={pressArtist(4)} name="Miley" />
+        {favorites.map(artist => (
+          <ArtistCell
+            key={artist.id}
+            onPress={pressArtist(artist.id)}
+            name={artist.name}
+          />
+        ))}
       </ScrollView>
     )
   }
 }
+
+function mapStateToProps(state, props) {
+  const { getFavorites } = ArtistSelectors
+  return {
+    favorites: getFavorites(state.artists)
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getArtist: id => dispatch(ArtistActions.artistRequest(id))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FavoritesScreen)
