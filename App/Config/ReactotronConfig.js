@@ -8,7 +8,7 @@ if (Config.useReactotron) {
   Reactotron
     .configure({ name: 'MusicBrainz Browser' })
     .useReactNative()
-    .use(reduxPlugin({ onRestore: Immutable }))
+    .use(reduxPlugin({}))
     .use(sagaPlugin())
 
   // Totally hacky, but this allows you to not both importing reactotron-react-native
