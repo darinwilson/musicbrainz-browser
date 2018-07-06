@@ -9,12 +9,13 @@ const ROOT = {
 }
 
 class RootContainer extends Component {
-  componentDidMount() {
+  componentWillMount() {
     if (console.tron) {
       console.tron.connect()
       console.tron.clear()
     }
-
+  }
+  componentDidMount() {
     this.props.startup()
   }
 

@@ -20,6 +20,11 @@ export function* searchArtist(api, action) {
       tags: (raw.tags || []).map(t => t.name || "").filter(Boolean)
     }))
 
+    const currentSearches = JSON.parse(yield call(AsyncStorage.getItem, 'mbb.searches'))
+    const newSearches = [...currentSearches, query]
+
+    yield call(AsyncStorage.setItem, 'mbb.searches', JSON.stringify(newSearches))
+
     yield put.resolve(ArtistActions.searchArtistSuccess(results))
   } else {
     yield put.resolve(ArtistActions.searchArtistFailure())

@@ -15,6 +15,18 @@ export default class HomeScreen extends Component {
     title: "MusicBrainz"
   }
 
+  componentDidMount() {
+    // console.tron.log('did mount')
+
+    // console.tron.display({
+    //   name: 'OHAI',
+    //   important: true,
+    //   preview: 'this shows up at the top!',
+    //   value: {a: 1, b: [1,2,3]},
+    //   image: 'http://placekitten.com/g/400/400'
+    // })
+  }
+
   pressSearch = () => this.props.navigation.navigate("artistSearch")
   pressFavs = () => this.props.navigation.navigate("favorites")
 
