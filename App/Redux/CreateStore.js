@@ -1,7 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import Config from '../Config/DebugConfig'
 import createSagaMiddleware from 'redux-saga'
-import ScreenTracking from './ScreenTrackingMiddleware'
 import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers'
 
 // creates the store
@@ -17,9 +16,6 @@ export default (rootReducer, rootSaga) => {
     state => state.nav
   )
   middleware.push(navigationMiddleware)
-
-  /* ------------- Analytics Middleware ------------- */
-  middleware.push(ScreenTracking)
 
   /* ------------- Saga Middleware ------------- */
 
