@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import { Image, View } from "react-native"
 import RoundedButton from "../Components/RoundedButton"
 import { Colors } from "../Themes"
+import Reactotron from 'reactotron-react-native'
 
 const ROOT = { flex: 1, backgroundColor: Colors.background }
 const IMAGE = { marginTop: 40, marginBottom: 30, alignSelf: "center" }
@@ -16,15 +17,15 @@ export default class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    // console.tron.log('did mount')
+    console.tron.logImportant('Hello Chain React!')
 
-    // console.tron.display({
-    //   name: 'OHAI',
-    //   important: true,
-    //   preview: 'this shows up at the top!',
-    //   value: {a: 1, b: [1,2,3]},
-    //   image: 'http://placekitten.com/g/400/400'
-    // })
+    console.tron.display({
+      name: 'OHAI',
+      important: true,
+      preview: 'this shows up at the top!',
+      value: {a: 1, b: [1,2,3]},
+      image: 'http://placekitten.com/g/400/400'
+    })
   }
 
   pressSearch = () => this.props.navigation.navigate("artistSearch")
