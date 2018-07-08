@@ -20,7 +20,7 @@ export default class RoundedButton extends Component {
     const personImage = { uri: "https://placekitten.com/300/300" }
     return (
       <TouchableOpacity style={ROOT} onPress={this.props.onPress}>
-        <Text style={NAME}>{this.props.name}</Text>
+        <Text style={NAME}>{this.prop.name}</Text>
       </TouchableOpacity>
     )
   }

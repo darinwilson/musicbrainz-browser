@@ -64,7 +64,7 @@ const create = (baseURL = 'https://api.github.com/') => {
   const artistSearch = (query) => mbapi.get('artist', {query: query})
 
   // fetches an artist record, including "release-groups" (which is what the world calls an "album")
-  const getArtist = (artistId) => mbapi.get(`artist/${artistId}`, {inc: 'release-groups url-rels', type: 'album'})
+  const getArtist = (artistId) => mbapi.get(`artist/${artist_id}`, {inc: 'release-groups url-rels', type: 'album'})
 
   // given a release group id, this returns all of the "releases" of an album (e.g. the US version,
   // the Japan version, the remastered version with bonus tracks, etc) - for our purposes, we'll
