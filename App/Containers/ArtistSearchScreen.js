@@ -39,7 +39,7 @@ class ArtistSearchScreen extends Component {
     title: "Artist Search"
   }
   state = {
-    query: "The Police"
+    query: this.props.navigation.state.params || "The Police"
   }
 
   changeText = value => this.setState({ query: value })

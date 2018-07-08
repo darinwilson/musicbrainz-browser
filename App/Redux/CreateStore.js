@@ -34,6 +34,12 @@ export default (rootReducer, rootSaga) => {
   // kick off root saga
   let sagasManager = sagaMiddleware.run(rootSaga)
 
+  console.tron.onCustomCommand('search', () => {
+    const artist = 'Milt Jackson'
+    store.dispatch({type: 'Navigation/NAVIGATE', routeName: 'artistSearch', params: artist})
+    store.dispatch({type: 'SEARCH_ARTIST_REQUEST', query: artist})
+  })
+
   return {
     store,
     sagasManager,
