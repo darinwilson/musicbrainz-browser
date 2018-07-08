@@ -17,15 +17,15 @@ export default class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    console.tron.logImportant('Hello Chain React!')
+    //console.tron.logImportant('Hello Chain React!')
 
-    console.tron.display({
-      name: 'OHAI',
-      important: true,
-      preview: 'this shows up at the top!',
-      value: {a: 1, b: [1,2,3]},
-      image: 'http://placekitten.com/g/400/400'
-    })
+    // console.tron.display({
+    //   name: 'OHAI',
+    //   important: true,
+    //   preview: 'this shows up at the top!',
+    //   value: {a: 1, b: [1,2,3]},
+    //   image: 'http://placekitten.com/g/400/400'
+    // })
   }
 
   pressSearch = () => this.props.navigation.navigate("artistSearch")
