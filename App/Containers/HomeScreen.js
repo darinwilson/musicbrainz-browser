@@ -17,7 +17,7 @@ export default class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    //console.tron.logImportant('Hello Chain React!')
+    //Reactotron.log('Hello Chain React!')
 
     // console.tron.display({
     //   name: 'OHAI',
