@@ -8,8 +8,8 @@ if (Config.useReactotron) {
   Reactotron
     .configure({ name: 'MusicBrainz Browser' })
     .useReactNative()
-    .use(reduxPlugin({}))
-    .use(sagaPlugin())
+    // .use(reduxPlugin({}))
+    // .use(sagaPlugin())
 
   console.tron = Reactotron
 }
