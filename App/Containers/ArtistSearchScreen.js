@@ -67,7 +67,7 @@ class ArtistSearchScreen extends Component {
           />
         </View>
         <View style={RESULTS}>
-          {artists.map(artist => (
+          {artists.map(artis => (
             <ArtistCell
               key={artist.id}
               onPress={pressArtist(artist.id)}
