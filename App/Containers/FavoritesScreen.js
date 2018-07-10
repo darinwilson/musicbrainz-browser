@@ -6,7 +6,7 @@ import ArtistCell from "../Components/ArtistCell"
 import { connect } from "react-redux"
 import ArtistActions, { ArtistSelectors } from "../Redux/ArtistRedux"
 
-const ROOT = { flex: 1, backgroundColor: Colors.background }
+const ROOT = { flex: 1, backgroundColor: Colors.background, paddingLeft: 10 }
 const IMAGE = { marginTop: 40, marginBottom: 30, alignSelf: "center" }
 
 class FavoritesScreen extends Component {

@@ -15,8 +15,8 @@ const IMAGE = {
   borderWidth: 1,
   borderColor: Colors.line
 }
-const NAME = {}
-const RELEASE_DATE = {}
+const NAME = { fontWeight: 'bold' }
+const RELEASE_DATE = { fontSize: Fonts.size.mediumSmall }
 
 export default class AlbumCell extends Component {
   render() {
@@ -26,7 +26,7 @@ export default class AlbumCell extends Component {
         <View style={DETAILS}>
           <Text style={NAME}>{this.props.name}</Text>
           <Text style={RELEASE_DATE}>
-            {format(this.props.releaseDate, "YYYY-MM-DD")}
+            {format(this.props.releaseDate, "YYYY")}
           </Text>
         </View>
       </TouchableOpacity>
