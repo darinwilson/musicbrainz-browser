@@ -13,7 +13,7 @@ const IMAGE = {
   borderWidth: 1,
   borderColor: Colors.line
 }
-const NAME = {}
+const NAME = { }
 
 export default class RoundedButton extends Component {
   render() {
